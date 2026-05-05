@@ -21,6 +21,8 @@
 2. **配置密钥**：在 Cursor 或 Claude Code 里与 Agent 对话，让它在终端执行以下命令（或你在本机终端自行执行）。例如双源 API：
 
    ```bash
+   请你帮我完成以下配置:
+   
    gpt-image2 config set opclab --api-key "你的双源API秘钥"
    gpt-image2 config use opclab
    ```
