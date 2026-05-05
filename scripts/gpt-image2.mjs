@@ -7,7 +7,7 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
-import { uploadFileToImgbb } from "./imgbb-upload.mjs";
+import { resolveImgbbApiKey, uploadFileToImgbb } from "./imgbb-upload.mjs";
 
 const VERSION = "0.1.0";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -509,15 +509,9 @@ async function handleGenerate(args) {
 }
 
 async function resolveGenerationsImageRefs(images, flags) {
-  const imgbbKey = flags.imgbbKey ?? envFirst("IMGBB_API_KEY");
   const forceBase64 = Boolean(flags.embedLocalBase64);
-  const useImgbb = Boolean(imgbbKey && String(imgbbKey).trim() !== "") && !forceBase64;
-  const hasLocal = images.some((ref) => !isHttpUrl(ref));
-  if (hasLocal && !useImgbb && !forceBase64) {
-    console.error(
-      "gpt-image2: local reference images use inline base64 in JSON. Set IMGBB_API_KEY or --imgbb-key to upload via ImgBB first, or run: node scripts/imgbb-upload.mjs <file>",
-    );
-  }
+  const useImgbb = !forceBase64;
+  const imgbbKey = useImgbb ? resolveImgbbApiKey(flags.imgbbKey ?? envFirst("IMGBB_API_KEY")) : "";
   let dryRunImgbbNote = false;
   const list = await Promise.all(
     images.map(async (ref) => {
@@ -1076,9 +1070,9 @@ Common options:
   --base-url <url>           Override API base URL, default ${DEFAULT_BASE_URL}
   --model <model>            Override model, default ${DEFAULT_MODEL}
   --edit-transport <mode>    Edit API: multipart (default, POST /images/edits) or generations (JSON POST /images/generations with image[])
-  --imgbb-key <key>          ImgBB key for generations edit: upload local refs to ImgBB instead of inline base64 (or set IMGBB_API_KEY)
+  --imgbb-key <key>          Override built-in ImgBB key for generations edit (or set IMGBB_API_KEY)
   --imgbb-expiration <sec>   Optional ImgBB auto-delete (60–15552000 seconds)
-  --embed-local-base64       With generations edit: force data URLs even if IMGBB_API_KEY is set
+  --embed-local-base64       With generations edit: force data URLs instead of ImgBB upload
   --size <size>              Example: 1024x1024, 1024x1536, 1536x1024
   --quality <value>          Pass through API quality value
   --background <value>       Pass through API background value

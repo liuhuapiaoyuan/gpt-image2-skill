@@ -3,12 +3,45 @@
  * Upload a local image to ImgBB (API v1) and print the direct image URL.
  * @see https://api.imgbb.com/
  */
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 const IMGBB_UPLOAD = "https://api.imgbb.com/1/upload";
+
+/** AES-256-GCM payload (iv || tag || ciphertext); key derived via PBKDF2 (not the ImgBB secret). */
+const IMGBB_KEY_CIPHER_B64 =
+  "lJgTR//3IS3aj0r6wm5gcjTj/KrawW212ZULZUul7B39PThdJBo5SjmcF38yXcI0YoUoqYbUhiJ8S9q/";
+
+function derivedImgbbKeyMaterial() {
+  return crypto.pbkdf2Sync("gpt-image2-skill/imgbb-default", "imgbb-v1", 100000, 32, "sha256");
+}
+
+/** Built-in ImgBB key (decrypted at runtime). Override with `--key` / `IMGBB_API_KEY` when needed. */
+export function getDefaultImgbbApiKey() {
+  const raw = Buffer.from(IMGBB_KEY_CIPHER_B64, "base64");
+  if (raw.length < 12 + 16 + 1) {
+    throw new Error("ImgBB embedded key blob is invalid.");
+  }
+  const iv = raw.subarray(0, 12);
+  const tag = raw.subarray(12, 28);
+  const enc = raw.subarray(28);
+  const decipher = crypto.createDecipheriv("aes-256-gcm", derivedImgbbKeyMaterial(), iv);
+  decipher.setAuthTag(tag);
+  return Buffer.concat([decipher.update(enc), decipher.final()]).toString("utf8");
+}
+
+/**
+ * @param {string|undefined|null} fromUser CLI `--key` or `IMGBB_API_KEY`
+ * @returns {string}
+ */
+export function resolveImgbbApiKey(fromUser) {
+  const t = fromUser != null ? String(fromUser).trim() : "";
+  if (t !== "") return t;
+  return getDefaultImgbbApiKey();
+}
 
 /**
  * @param {{ apiKey: string, filePath: string, expiration?: string|number }} opts
@@ -68,20 +101,21 @@ Usage:
   imgbb-upload <file> ...
 
 Environment:
-  IMGBB_API_KEY   ImgBB API key if --key is omitted
+  IMGBB_API_KEY   Optional; overrides the built-in default key if set
 
 Options:
-  --key <apiKey>        Override IMGBB_API_KEY
+  --key <apiKey>        ImgBB key (default: built-in encrypted key)
   --expiration <sec>    Auto-delete after 60–15552000 seconds (ImgBB)
   --json                Print full API data object instead of one URL per line
 
 Examples:
-  IMGBB_API_KEY=xxx node scripts/imgbb-upload.mjs ./photo.png
+  node scripts/imgbb-upload.mjs ./photo.png
   node scripts/imgbb-upload.mjs ./a.png ./b.png --key YOUR_KEY
 `);
 }
 
 function parseCli(argv) {
+  /** @type {string|undefined} */
   let key = process.env.IMGBB_API_KEY;
   /** @type {string|undefined} */
   let expiration;
@@ -130,13 +164,16 @@ async function main() {
     printHelp();
     exitWithError("Pass at least one image file.");
   }
-  if (!parsed.key || String(parsed.key).trim() === "") {
-    exitWithError("Missing ImgBB API key. Set IMGBB_API_KEY or pass --key.");
+  let apiKey;
+  try {
+    apiKey = resolveImgbbApiKey(parsed.key);
+  } catch (e) {
+    exitWithError(e instanceof Error ? e.message : String(e));
   }
   const results = [];
   for (const file of parsed.files) {
     const { url, data } = await uploadFileToImgbb({
-      apiKey: parsed.key,
+      apiKey,
       filePath: file,
       expiration: parsed.expiration,
     });
