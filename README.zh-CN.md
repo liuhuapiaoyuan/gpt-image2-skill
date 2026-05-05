@@ -91,10 +91,10 @@ npm unlink -g gpt-image2-skill
 
 ### 1. 配置 API 渠道
 
-使用 [OPCLab](https://api.opclab.vip) 这类 OpenAI 兼容网关：
+使用 [OPCLab](https://ai-api.qzsyzn.com) 这类 OpenAI 兼容网关：
 
 ```bash
-gpt-image2 config set opclab --api-key "你的key" --base-url "https://api.opclab.vip/v1" --model "gpt-image-2"
+gpt-image2 config set opclab --api-key "你的key" --base-url "https://ai-api.qzsyzn.com/v1" --model "gpt-image-2"
 gpt-image2 config use opclab
 gpt-image2 config show
 ```
@@ -291,7 +291,7 @@ gpt-image2 generate --prompt "高端茶叶包装设计，东方极简风格" --b
 人类使用示例：
 
 ```bash
-gpt-image2 config set opclab --api-key "你的key" --base-url "https://api.opclab.vip/v1" --model "gpt-image-2"
+gpt-image2 config set opclab --api-key "你的key" --base-url "https://ai-api.qzsyzn.com/v1" --model "gpt-image-2"
 gpt-image2 config use opclab
 gpt-image2 templates list
 gpt-image2 try city-poster --var city=Hangzhou --output outputs/hangzhou-poster.png
@@ -433,9 +433,9 @@ node scripts/gpt-image2.mjs templates list
 
 ## 推荐网关示例
 
-如果你需要一个 OpenAI 兼容接口用于测试或 Agent 工作流，可以参考 [OPCLab](https://api.opclab.vip)。
+如果你需要一个 OpenAI 兼容接口用于测试或 Agent 工作流，可以参考 [OPCLab](https://ai-api.qzsyzn.com)。
 
 ```bash
-gpt-image2 config set opclab --api-key "你的key" --base-url "https://api.opclab.vip/v1" --model "gpt-image-2"
+gpt-image2 config set opclab --api-key "你的key" --base-url "https://ai-api.qzsyzn.com/v1" --model "gpt-image-2"
 gpt-image2 config use opclab
 ```

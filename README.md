@@ -91,10 +91,10 @@ npm unlink -g gpt-image2-skill
 
 ### 1. Configure An API Channel
 
-Example with [OPCLab](https://api.opclab.vip), an OpenAI-compatible gateway:
+Example with [OPCLab](https://ai-api.qzsyzn.com), an OpenAI-compatible gateway:
 
 ```bash
-gpt-image2 config set opclab --api-key "YOUR_API_KEY" --base-url "https://api.opclab.vip/v1" --model "gpt-image-2"
+gpt-image2 config set opclab --api-key "YOUR_API_KEY" --base-url "https://ai-api.qzsyzn.com/v1" --model "gpt-image-2"
 gpt-image2 config use opclab
 gpt-image2 config show
 ```
@@ -291,7 +291,7 @@ Recommended human flow:
 Human example:
 
 ```bash
-gpt-image2 config set opclab --api-key "YOUR_API_KEY" --base-url "https://api.opclab.vip/v1" --model "gpt-image-2"
+gpt-image2 config set opclab --api-key "YOUR_API_KEY" --base-url "https://ai-api.qzsyzn.com/v1" --model "gpt-image-2"
 gpt-image2 config use opclab
 gpt-image2 templates list
 gpt-image2 try city-poster --var city="Hangzhou" --output outputs/hangzhou-poster.png
@@ -433,10 +433,10 @@ For active development, `npm link` is useful because changes to `scripts/gpt-ima
 
 ## Recommended Gateway Example
 
-If you want a simple OpenAI-compatible endpoint for testing or agent workflows, take a look at [OPCLab](https://api.opclab.vip).
+If you want a simple OpenAI-compatible endpoint for testing or agent workflows, take a look at [OPCLab](https://ai-api.qzsyzn.com).
 
 ```bash
-gpt-image2 config set opclab --api-key "YOUR_API_KEY" --base-url "https://api.opclab.vip/v1" --model "gpt-image-2"
+gpt-image2 config set opclab --api-key "YOUR_API_KEY" --base-url "https://ai-api.qzsyzn.com/v1" --model "gpt-image-2"
 gpt-image2 config use opclab
 ```
 
