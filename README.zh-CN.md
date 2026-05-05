@@ -8,7 +8,24 @@
 
 项目地址：
 
-- [https://github.com/houht1013/gpt-image2-skill](https://github.com/houht1013/gpt-image2-skill)
+- [https://github.com/liuhuapiaoyuan/gpt-image2-skill](https://github.com/liuhuapiaoyuan/gpt-image2-skill)
+
+## 在 Cursor / Claude Code 中使用（推荐）
+
+1. **安装 skill**：在任意目录执行：
+
+   ```bash
+   npx skills add liuhuapiaoyuan/gpt-image2-skill
+   ```
+
+2. **配置密钥**：在 Cursor 或 Claude Code 里与 Agent 对话，让它在终端执行以下命令（或你在本机终端自行执行）。例如双源 API：
+
+   ```bash
+   gpt-image2 config set opclab --api-key "你的双源API秘钥"
+   gpt-image2 config use opclab
+   ```
+
+   不写 `--base-url` / `--model` 时会使用 CLI 内置默认值；若要指定 OPCLab 网关等完整参数，见下文「快速上手」里的完整示例。
 
 ## 它能做什么
 
@@ -35,7 +52,7 @@
 克隆项目，并把 `gpt-image2` 链接为全局命令：
 
 ```bash
-git clone https://github.com/houht1013/gpt-image2-skill.git
+git clone https://github.com/liuhuapiaoyuan/gpt-image2-skill.git
 cd gpt-image2-skill
 npm link
 gpt-image2 --help
@@ -390,7 +407,7 @@ gpt-image2 generate --template city-poster --var city=Chengdu --curl
 如果希望 Codex 自动发现这个项目作为 skill，可以从 GitHub 安装：
 
 ```bash
-python "C:\Users\houht\.codex\skills\.system\skill-installer\scripts\install-skill-from-github.py" --repo houht1013/gpt-image2-skill --path . --name gpt-image2
+python "C:\Users\houht\.codex\skills\.system\skill-installer\scripts\install-skill-from-github.py" --repo liuhuapiaoyuan/gpt-image2-skill --path . --name gpt-image2
 ```
 
 默认安装目录：
@@ -406,7 +423,7 @@ python "C:\Users\houht\.codex\skills\.system\skill-installer\scripts\install-ski
 推荐对外使用 `gpt-image2` 命令。如果不想链接全局命令，也可以在仓库目录中直接运行源码脚本：
 
 ```bash
-git clone https://github.com/houht1013/gpt-image2-skill.git
+git clone https://github.com/liuhuapiaoyuan/gpt-image2-skill.git
 cd gpt-image2-skill
 node scripts/gpt-image2.mjs --help
 node scripts/gpt-image2.mjs templates list

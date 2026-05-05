@@ -8,7 +8,24 @@ A lightweight `gpt-image-2` command-line tool and Codex skill for image generati
 
 Repository:
 
-- [https://github.com/houht1013/gpt-image2-skill](https://github.com/houht1013/gpt-image2-skill)
+- [https://github.com/liuhuapiaoyuan/gpt-image2-skill](https://github.com/liuhuapiaoyuan/gpt-image2-skill)
+
+## Cursor / Claude Code (recommended)
+
+1. **Install the skill** (any directory):
+
+   ```bash
+   npx skills add liuhuapiaoyuan/gpt-image2-skill
+   ```
+
+2. **Set your API key**: Chat with the agent in Cursor or Claude Code and have it run these in the terminal (or run them yourself). Example for a dual-source / OPCLab-style key:
+
+   ```bash
+   gpt-image2 config set opclab --api-key "YOUR_DUAL_SOURCE_API_KEY"
+   gpt-image2 config use opclab
+   ```
+
+   If you omit `--base-url` and `--model`, the CLI uses its built-in defaults. For an explicit gateway (for example OPCLab URL and model), use the full **`Configure An API Channel`** example in **Quick Start** below.
 
 ## What It Does
 
@@ -35,7 +52,7 @@ It is intentionally small:
 Clone the project and link the `gpt-image2` command globally:
 
 ```bash
-git clone https://github.com/houht1013/gpt-image2-skill.git
+git clone https://github.com/liuhuapiaoyuan/gpt-image2-skill.git
 cd gpt-image2-skill
 npm link
 gpt-image2 --help
@@ -390,7 +407,7 @@ gpt-image2 generate --template city-poster --var city=Chengdu --curl
 If you want Codex to discover this project as a reusable skill, install it from GitHub:
 
 ```bash
-python "C:\Users\%USERNAME%\.codex\skills\.system\skill-installer\scripts\install-skill-from-github.py" --repo houht1013/gpt-image2-skill --path . --name gpt-image2
+python "C:\Users\%USERNAME%\.codex\skills\.system\skill-installer\scripts\install-skill-from-github.py" --repo liuhuapiaoyuan/gpt-image2-skill --path . --name gpt-image2
 ```
 
 Installed destination:
@@ -406,7 +423,7 @@ Restart Codex after installation.
 The preferred user-facing command is `gpt-image2`. If you do not want to link the CLI globally, you can run the source script directly from the repository:
 
 ```bash
-git clone https://github.com/houht1013/gpt-image2-skill.git
+git clone https://github.com/liuhuapiaoyuan/gpt-image2-skill.git
 cd gpt-image2-skill
 node scripts/gpt-image2.mjs --help
 node scripts/gpt-image2.mjs templates list
